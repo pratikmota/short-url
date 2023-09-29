@@ -1,0 +1,43 @@
+version: '3.9'
+services:
+  #url-server
+  url-server:
+    container_name: shorturlserver
+    build:
+      context: ./url-server
+      dockerfile: url-server.dockerfile
+      args:
+        DB_URL: "postgres://postgres:postgres@db:5432/postgres"
+    restart: always
+    networks:
+      - shorturlnet
+    ports:
+      - "8080:8080"
+    deploy:
+      mode: replicated
+      replicas: 1
+    depends_on:
+      - db
+
+  #PG SQL Service
+  db:
+    container_name: db
+    image: 'postgres:14.2'
+    networks:
+      - shorturlnet
+    ports:
+      - "5432:5432"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - ./db-data/postgres/:/var/lib/postgresql/data/
+networks:
+  shorturlnet:
+    driver: bridge
