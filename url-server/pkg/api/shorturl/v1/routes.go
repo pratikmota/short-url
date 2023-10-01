@@ -22,4 +22,5 @@ func Routes(
 	// HTTP Verb: POST
 	// Handler Func Name: RegistrationHandler
 	mux.Post("/v1/registration/", RegistrationHandler(routesMng))
+	mux.Get("/v1/hello/", HelloHandler(routesMng))
 }

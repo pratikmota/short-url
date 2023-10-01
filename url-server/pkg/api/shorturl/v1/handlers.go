@@ -6,6 +6,13 @@ import (
 	"net/http"
 )
 
+func HelloHandler(routesMng RoutesManager) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
+		w.WriteHeader(http.StatusOK)
+	}
+}
+
 func RegistrationHandler(routesMng RoutesManager) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
