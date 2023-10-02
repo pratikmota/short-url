@@ -8,9 +8,31 @@ import (
 
 func HelloHandler(routesMng RoutesManager) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
-		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/json")
+
+		response := UserDetailsResponse{}
+
+		response.UserData = UserData{
+			Name:         "Pratik",
+			MobileNumber: "8888",
+		}
+
+		generateResponse(w, response, http.StatusOK)
 	}
+}
+
+func generateResponse(
+	w http.ResponseWriter,
+	response UserDetailsResponse,
+	statusCode int,
+) {
+	responseJson, err := json.Marshal(response)
+	if err != nil {
+		panic(fmt.Errorf("error while marshaling UserDetailsResponse response: %s", err.Error()))
+	}
+
+	w.WriteHeader(statusCode)
+	w.Write(responseJson)
 }
 
 func RegistrationHandler(routesMng RoutesManager) func(http.ResponseWriter, *http.Request) {
